@@ -1,21 +1,19 @@
-import React from 'react'
+import React, {useState} from 'react'
 import Card from './Card'
 import Add from './Add'
 
-const defaultCardObjects = [
-  {title : "To Do", tasks: ['Task #6']},
-  {title : "In Progress", tasks: ['Task #4', 'Task #5']},
-  {title : "In Review", tasks: ['Task #2', 'Task #3']},
-  {title : "Done", tasks: ['Task #1']}
-]
-
 const Column = () => {
-  
+  const [cardObjects, setCardObjects] = useState([
+    {title : "To Do", tasks: ['Task #6']},
+    {title : "In Progress", tasks: ['Task #4', 'Task #5']},
+    {title : "In Review", tasks: ['Task #2', 'Task #3']},
+    {title : "Done", tasks: ['Task #1']}
+  ])
   
   return (
     <>
       {
-        defaultCardObjects.map(cardObject => {
+        cardObjects.map(cardObject => {
           return (
             <div className="bg-[#3c3836] rounded-lg p-4 min-h-[500px]" key={cardObject.title}>
             <h2 className="text-lg font-semibold text-[#ebdbb2] mb-4 pb-2 border-b border-[#504945]">
@@ -23,12 +21,12 @@ const Column = () => {
             </h2>
             <div>
               {
-                cardObject.tasks.map(task => (
-                  <Card task={task} />
+                cardObject.tasks.map((task, key) => (
+                  <Card key={key} task={task} />
                   ))
               }
             </div>
-            <Add />
+            <Add column={cardObject.title} cardObjects={cardObjects} setCardObjects={setCardObjects} />
           </div>
           )
         })
