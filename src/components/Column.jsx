@@ -6,10 +6,10 @@ import { v4 as uuidv4 } from 'uuid';
 const Column = () => {
 
   const [cardObjects, setCardObjects] = useState([
-    {title : "To Do", tasks: ['Task #6']},
-    {title : "In Progress", tasks: ['Task #4', 'Task #5']},
-    {title : "In Review", tasks: ['Task #2', 'Task #3']},
-    {title : "Done", tasks: ['Task #1']}
+    {title : "To Do", tasks: []},
+    {title : "In Progress", tasks: []},
+    {title : "In Review", tasks: []},
+    {title : "Done", tasks: []}
   ])
 
   const generateUUID = () => {
@@ -56,7 +56,9 @@ const Column = () => {
               onDrop={(e) => {
                 e.preventDefault()
                 const { title, task } = JSON.parse(e.dataTransfer.getData('text/plain'))
-                moveTask(title, cardObject.title, task)
+                if(title !== cardObject.title) {
+                  moveTask(title, cardObject.title, task)
+                }
               }}
             >
             <h2 className="text-lg font-semibold text-[#ebdbb2] mb-4 pb-2 border-b border-[#504945]">
@@ -69,7 +71,11 @@ const Column = () => {
                   ))
               }
             </div>
-            <Add column={cardObject.title} cardObjects={cardObjects} setCardObjects={setCardObjects} />
+            {
+              cardObject.title === 'To Do' 
+              && (<Add column={cardObject.title} cardObjects={cardObjects} setCardObjects={setCardObjects} />)
+            }
+            
           </div>
           )
         })
