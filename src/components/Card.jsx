@@ -2,13 +2,12 @@ import React from 'react'
 
 
 
-const Card = ({task, id}) => {
+const Card = ({task, id, title, cardObjects, setCardObjects}) => {
   return (
     <div 
       draggable
       onDragStart={(e) => {
-        e.dataTransfer.setData('text/plain', task)
-        console.log(task)
+        e.dataTransfer.setData('text/plain', JSON.stringify({title, task}))
       }}
       onDragOver={(e) => {
         e.preventDefault()

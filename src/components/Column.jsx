@@ -17,17 +17,28 @@ const Column = () => {
     return newId
   }
 
-  const addDropContent = (title, task) => {
-    const updatedDropContent = cardObjects.map(cardObject => {
-      if(cardObject.title === title) {
-        return {
-          ...cardObject,
-          tasks : [...cardObject.tasks, task]
+  const moveTask = (fromTitle, toTitle, task) => {
+    setCardObjects(prev =>
+      prev.map(cardObject => {
+        // remove from source column
+        if (cardObject.title === fromTitle) {
+          return {
+            ...cardObject,
+            tasks: cardObject.tasks.filter(t => t !== task)
+          }
         }
-      }
-      return cardObject
-    })
-    setCardObjects(updatedDropContent)
+
+        // add to target column
+        if (cardObject.title === toTitle) {
+          return {
+            ...cardObject,
+            tasks: [...cardObject.tasks, task]
+          }
+        }
+
+        return cardObject
+      })
+    )
   }
 
 
@@ -44,9 +55,8 @@ const Column = () => {
               }}
               onDrop={(e) => {
                 e.preventDefault()
-                const task = e.dataTransfer.getData('text/plain')
-                console.log('dropped-item: ', task)
-                addDropContent(cardObject.title, task)
+                const { title, task } = JSON.parse(e.dataTransfer.getData('text/plain'))
+                moveTask(title, cardObject.title, task)
               }}
             >
             <h2 className="text-lg font-semibold text-[#ebdbb2] mb-4 pb-2 border-b border-[#504945]">
@@ -55,7 +65,7 @@ const Column = () => {
             <div>
               {
                 cardObject.tasks.map((task) => (
-                  <Card key={generateUUID()} task={task} id={generateUUID()} />
+                  <Card key={generateUUID()} title={cardObject.title} task={task} id={generateUUID()} cardObjects={cardObjects} setCardObjects={setCardObjects} />
                   ))
               }
             </div>
